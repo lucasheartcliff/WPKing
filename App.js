@@ -1,43 +1,18 @@
 import React from 'react';
-import {
-  View,
-  Button
-} from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import ImageContainer from 'src/container/imageContainer';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import ImagePicker from 'react-native-image-crop-picker';
-import {openDatabase,insertOnDatabase,fetchOnDatabase} from './src/services/syncDb';
+Icon.loadFont();
 
-//import Wallpaper from 'rnwallpaper';
+const AppNavigation = createDrawerNavigator({
+  ImageContainer:{
+    screen: ImageContainer,
+    navigationOptions: () => ({
+      drawerIcon: <Icon name={"lock"} size={20}/> 
+    }),
+  },
+});
 
-const selectImage = () => {
-  console.log("Selecting Image...");
-  ImagePicker.openPicker({
-    multiple: true
-  }).then(images => {
-    console.log(images);
-  }).catch(error => {
-    console.log(error);
-    //Nothing
-  });
-}
-
-const testDatabase = () => {
-  try{
-    openDatabase();
-    insertOnDatabase('image',{id:1,uri:'imagem'});
-    let result = fetchOnDatabase('image');
-    console.log(result);
-  }catch(error){
-    console.log(error);
-  }
-}
-
-const App = () => {
-  return (
-    <View>
-      <Button title={"Select Image"} onClick={testDatabase()} />
-    </View>
-  );
-};
-
-export default App;
+export default createAppContainer(AppNavigation);
