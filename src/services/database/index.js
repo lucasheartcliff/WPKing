@@ -1,10 +1,8 @@
-import realm from 'realm';
+const Realm = require('realm');
 
 const imageSchema = {
     name: 'image',
-    primaryKey: 'id',
     properties: {
-        id: 'int',
         uri: 'string'
     }
 }
@@ -19,15 +17,15 @@ const settingsSchema = {
 
 const openDatabase = () => {
     return (
-        realm.open({
+        Realm.open({
+            path:'database',
             schema: [imageSchema, settingsSchema]
-        })
+        }).then(realm=>realm)
     );
 }
 
-const insertOnDatabase = (branchName, dataObject) => {
+const insertOnDatabase = (realm, branchName, dataObject) => {
     //let schema = branchName === 'image' ? imageSchema : settingsSchema; 
-
     return (
         realm.write(() => {
             realm.create(branchName, dataObject);
@@ -35,7 +33,7 @@ const insertOnDatabase = (branchName, dataObject) => {
     );
 }
 
-const deleteOnDatabase = (branchName, dataObject) => {
+const deleteOnDatabase = (realm, branchName, dataObject) => {
     return (
         realm.write(() => {
             const data = realm.create(branchName, dataObject);
@@ -44,7 +42,16 @@ const deleteOnDatabase = (branchName, dataObject) => {
     );
 }
 
-const fetchOnDatabase = (branchName) => {
+const deleteAllOnDatabase = (realm, branchName) => {
+    return (
+        realm.write(() => {
+            const data = realm.objects(branchName);
+            realm.delete(data);
+        })
+    );
+}
+
+const fetchOnDatabase = (realm, branchName) => {
     const result = realm.objects(branchName);
     return result;
 }
@@ -53,5 +60,6 @@ export {
     openDatabase,
     insertOnDatabase,
     fetchOnDatabase,
-    deleteOnDatabase
+    deleteOnDatabase,
+    deleteAllOnDatabase
 }
