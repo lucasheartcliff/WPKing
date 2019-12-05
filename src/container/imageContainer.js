@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, Text, FlatList, Image } from 'react-native';
-
-import {useNavigation} from 'react-navigation';
-import { DrawerActions } from 'react-navigation/routers';
-
 import { openDatabase, insertOnDatabase, fetchOnDatabase, deleteAllOnDatabase } from 'src/services/database';
 import selectImage from 'src/services/selectImage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-
+Icon.loadFont();
 
 const setImageOnList = async (setState) => {
   try {
@@ -41,19 +38,22 @@ const getImageOnStorage = async () => {
   }
 }
 
-const ImageContainer = () => {
+const ImageContainer = ({navigation}) => {
   const [images, setImages] = useState([]);
-  const navigation = useNavigation();
-
 
   useEffect(() => {
-    setImageOnList(setImages);
+    //setImageOnList(setImages);
   });
+
+
 
   return (
     <View style={{ flex: 1}}>
+      <View >
+        <Icon name={"star"} size={30} color={'#333'}/>
+      </View>
       <Button title={"Get Image"} onPress={() => { getImageOnStorage() }} />
-      <Button title={"Open Drawer"} onPress={() => { navigation.dispatch(DrawerActions.openDrawer()) }} />
+      <Button title={"Open Drawer"} onPress={() => {navigation.toggleDrawer()}} />
       <FlatList
         data={images}
         keyExtractor={item => item.uri}

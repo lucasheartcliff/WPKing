@@ -1,18 +1,32 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { NavigationNativeContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import ImageContainer from 'src/container/imageContainer';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import SettingsContainer from 'src/container/settingsContainer';
 
-Icon.loadFont();
+const Drawer = createDrawerNavigator();
 
-const AppNavigation = createDrawerNavigator({
-  ImageContainer:{
-    screen: ImageContainer,
-    navigationOptions: () => ({
-      drawerIcon: <Icon name={"lock"} size={20}/> 
-    }),
-  },
-});
+const App = () => {
+  return (
+    <NavigationNativeContainer>
+      <Drawer.Navigator >
+        <Drawer.Screen
+          name={'Painel'}
+          component={ImageContainer}
+          options={{
+            title:'Painel',
+          }}
+        />
+        <Drawer.Screen
+          name={'Opções'}
+          component={SettingsContainer}
+          options={{
+            headerTitle: 'Opções'
+          }}
+        />
+      </Drawer.Navigator>
+    </NavigationNativeContainer>
+  );
+};
 
-export default createAppContainer(AppNavigation);
+export default App;
