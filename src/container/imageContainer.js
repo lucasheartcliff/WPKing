@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, Dimensions } from 'react-native';
 import { openDatabase, insertOnDatabase, fetchOnDatabase, deleteAllOnDatabase } from 'src/services/database';
 import selectImage from 'src/services/selectImage';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { NavBar } from 'galio-framework';
+import Header from 'src/components/header';
+import IconButton from 'src/components/icons'
+import { toggleDrawer } from 'react-navigation-drawer/lib/typescript/src/routers/DrawerActions';
 
-Icon.loadFont();
+let { width } = Dimensions.get('window');
+let numberGrid = 3;
+let itemWidth = width / numberGrid;
+
 
 const setImageOnList = async (setState) => {
   try {
     const realm = await openDatabase();
+
     let res = await fetchOnDatabase(realm, 'image');
-    
+
     let data = [];
     for (let i = 0; i < res.length; i++) {
       data.push(res[`${i}`]);
@@ -24,7 +31,7 @@ const setImageOnList = async (setState) => {
 }
 
 
-const getImageOnStorage = async () => {
+const getImageFromStorage = async () => {
   try {
     const imagesArray = await selectImage();
     const realm = await openDatabase();
@@ -38,34 +45,34 @@ const getImageOnStorage = async () => {
   }
 }
 
-const ImageContainer = ({navigation}) => {
+const ImageContainer = ({ navigation }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    //setImageOnList(setImages);
+    setImageOnList(setImages);
   });
 
 
 
   return (
-    <View style={{ flex: 1}}>
-      <View >
-        <Icon name={"star"} size={30} color={'#333'}/>
-      </View>
-      <Button title={"Get Image"} onPress={() => { getImageOnStorage() }} />
-      <Button title={"Open Drawer"} onPress={() => {navigation.toggleDrawer()}} />
+    <View style={{ flex: 1 }}>
+      <NavBar
+        left={
+          <IconButton
+            icon={"menu"}
+            size={18} 
+            onPress={()=>{navigation.toggleDrawer()}}
+          />
+        }
+        rightStyle={{ alignItems: 'center' }}
+      />
       <FlatList
         data={images}
         keyExtractor={item => item.uri}
-        numColumns={3}
+        numColumns={numberGrid}
         renderItem={({ item }) => {
           return (
-            <View style={{ flex: 1, margin: 3, alignItems: 'flex-start', justifyContent: 'center' }}>
-              <Image
-                style={{ width: 100, height: 100 }}
-                source={{ uri: item.uri }}
-              />
-            </View>
+            <Image style={{ width: itemWidth, height: itemWidth }} source={{ uri: item.uri }} />
           );
         }}
       />
