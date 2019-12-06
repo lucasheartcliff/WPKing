@@ -5,12 +5,10 @@ import selectImage from 'src/services/selectImage';
 import { NavBar } from 'galio-framework';
 import Header from 'src/components/header';
 import IconButton from 'src/components/icons'
-import { toggleDrawer } from 'react-navigation-drawer/lib/typescript/src/routers/DrawerActions';
 
 let { width } = Dimensions.get('window');
 let numberGrid = 3;
 let itemWidth = width / numberGrid;
-
 
 const setImageOnList = async (setState) => {
   try {
@@ -55,16 +53,23 @@ const ImageContainer = ({ navigation }) => {
 
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor:'#ddd' }}>
       <NavBar
         left={
           <IconButton
             icon={"menu"}
-            size={18} 
+            size={20} 
             onPress={()=>{navigation.toggleDrawer()}}
           />
         }
-        rightStyle={{ alignItems: 'center' }}
+        right={
+          <IconButton
+            icon={"add"}
+            size={20} 
+            onPress={()=>{getImageFromStorage()}}
+          />
+        }
+        rightStyle={{alignItems:'flex-end'}}
       />
       <FlatList
         data={images}

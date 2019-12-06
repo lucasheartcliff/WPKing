@@ -21,7 +21,7 @@ const App = () => {
           name={'Opções'}
           component={SettingsContainer}
           options={{
-            headerTitle: 'Opções'
+            title: 'Opções'
           }}
         />
       </Drawer.Navigator>
