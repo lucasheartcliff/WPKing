@@ -3,8 +3,8 @@ import { View, Text, FlatList, Image, Dimensions } from 'react-native';
 import { openDatabase, insertOnDatabase, fetchOnDatabase, deleteAllOnDatabase } from 'src/services/database';
 import selectImage from 'src/services/selectImage';
 import { NavBar } from 'galio-framework';
-import Header from 'src/components/header';
-import IconButton from 'src/components/icons'
+import Button from 'src/components/Button'
+import Icon from 'src/components/Icon'
 
 let { width } = Dimensions.get('window');
 let numberGrid = 3;
@@ -28,7 +28,6 @@ const setImageOnList = async (setState) => {
   }
 }
 
-
 const getImageFromStorage = async () => {
   try {
     const imagesArray = await selectImage();
@@ -50,27 +49,32 @@ const ImageContainer = ({ navigation }) => {
     setImageOnList(setImages);
   });
 
-
-
   return (
-    <View style={{ flex: 1, backgroundColor:'#ddd' }}>
+    <View style={{ flex: 1, backgroundColor: '#ddd' }}>
       <NavBar
         left={
-          <IconButton
+          <Button
+            onlyIcon
+            color={"transparent"}
             icon={"menu"}
-            size={20} 
-            onPress={()=>{navigation.toggleDrawer()}}
+            iconFamily={"Feather"}
+            iconSize={22}
+            onPress={() => { navigation.toggleDrawer() }}
           />
         }
         right={
-          <IconButton
-            icon={"add"}
-            size={20} 
-            onPress={()=>{getImageFromStorage()}}
+          <Button
+            onlyIcon
+            color={"transparent"}
+            icon={"plus"}
+            iconFamily={"Feather"}
+            iconSize={22}
+            onPress={() => { navigation.toggleDrawer() }}
           />
         }
-        rightStyle={{alignItems:'flex-end'}}
+        rightStyle={{ alignItems: 'flex-end', justifyContent:'flex-end' }}
       />
+
       <FlatList
         data={images}
         keyExtractor={item => item.uri}
