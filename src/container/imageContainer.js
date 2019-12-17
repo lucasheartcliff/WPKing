@@ -10,11 +10,7 @@ import {
   fetchOnDatabase,
 } from 'src/services/database';
 
-//import Button from 'src/components/Button';
-
-let {width} = Dimensions.get('window');
 let numberGrid = 3;
-let itemWidth = (width - 20) / numberGrid;
 
 const setImageOnList = async setState => {
   try {
@@ -28,13 +24,12 @@ const setImageOnList = async setState => {
     }
 
     await setState(data);
-    //realm.close();
   } catch (error) {
     console.log(error);
   }
 };
 
-const getImageFromStorage = async () => {
+const getImageFromStorage = async setState => {
   try {
     const imagesArray = await selectImage();
     const realm = await openDatabase();
@@ -42,7 +37,8 @@ const getImageFromStorage = async () => {
     await imagesArray.map(image => {
       insertOnDatabase(realm, 'image', {uri: image.path});
     });
-    //realm.close();
+
+    setImageOnList(setState);
   } catch (error) {
     console.log(error);
   }
@@ -50,9 +46,27 @@ const getImageFromStorage = async () => {
 
 const ImageContainer = ({navigation}) => {
   const [images, setImages] = useState([]);
+  const [screenWidth, setScreenWidth] = useState();
   const theme = 'light';
 
   useEffect(() => {
+    const onChange = result => {
+      let {width, height} = result.screen;
+
+      if (width > height) {
+        width = width * 0.88;
+      } else {
+        width = width * 0.93;
+      }
+
+      let itemWidth = width / numberGrid;
+
+      setScreenWidth(itemWidth);
+    };
+
+    Dimensions.addEventListener('change', onChange);
+
+    onChange({screen: Dimensions.get('screen')});
     setImageOnList(setImages);
   }, []);
 
@@ -64,9 +78,13 @@ const ImageContainer = ({navigation}) => {
     header: {
       backgroundColor: color[theme].primary,
     },
+    listImage: {
+      flex: 1,
+      alignItems: 'center',
+    },
     image: {
-      width: itemWidth,
-      height: itemWidth,
+      width: screenWidth,
+      height: screenWidth,
       margin: 3,
       elevation: 6,
     },
@@ -89,18 +107,20 @@ const ImageContainer = ({navigation}) => {
           onPress={() => navigation.toggleDrawer()}
         />
       </Appbar.Header>
-      <FlatList
-        data={images}
-        keyExtractor={item => item.uri}
-        numColumns={numberGrid}
-        renderItem={({item}) => {
-          return <ImageCard uri={item.uri} style={styles.image} />;
-        }}
-      />
+      <View style={styles.listImage}>
+        <FlatList
+          data={images}
+          keyExtractor={item => item.uri}
+          numColumns={numberGrid}
+          renderItem={({item}) => {
+            return <ImageCard uri={item.uri} style={styles.image} />;
+          }}
+        />
+      </View>
       <FAB
         style={styles.fab}
         icon="image-plus"
-        onPress={() => console.log({width, color})}
+        onPress={() => getImageFromStorage(setImages)}
       />
     </View>
   );
