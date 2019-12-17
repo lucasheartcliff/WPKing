@@ -17,7 +17,9 @@ const App = createDrawerNavigator({
     screen: SettingsContainer,
     navigationOptions: ({navigation}) => ({
       title: 'Configurações',
-      drawerIcon: (focus, tintColor) => <Icon name={'settings'} size={24} color={focus?tintColor:''} />,
+      drawerIcon: (focus, tintColor) => (
+        <Icon name={'settings'} size={24} color={focus ? tintColor : ''} />
+      ),
     }),
   },
 });
