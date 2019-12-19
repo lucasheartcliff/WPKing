@@ -3,25 +3,39 @@ import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import ImageContainer from 'src/container/imageContainer';
 import SettingsContainer from 'src/container/settingsContainer';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import SideBar from 'src/components/SideBar';
+import DrawerItem from 'src/components/DrawerItem';
 
-const App = createDrawerNavigator({
-  Dashboard: {
-    screen: ImageContainer,
-    navigationOptions: ({navigation}) => ({
-      title: 'Painel',
-      drawerIcon: () => <Icon name={'view-grid'} size={24} />,
-    }),
+const App = createDrawerNavigator(
+  {
+    Dashboard: {
+      screen: ImageContainer,
+      navigationOptions: ({navigation}) => ({
+        drawerLabel: ({focused}) => (
+          <DrawerItem
+            focused={focused}
+            screen="ImageContainer"
+            title="Painel"
+          />
+        ),
+      }),
+    },
+    Settings: {
+      screen: SettingsContainer,
+      navigationOptions: ({navigation}) => ({
+        drawerLabel: ({focused}) => (
+          <DrawerItem
+            focused={focused}
+            screen="SettingsContainer"
+            title="Configurações"
+          />
+        ),
+      }),
+    },
   },
-  Settings: {
-    screen: SettingsContainer,
-    navigationOptions: ({navigation}) => ({
-      title: 'Configurações',
-      drawerIcon: (focus, tintColor) => (
-        <Icon name={'settings'} size={24} color={focus ? tintColor : ''} />
-      ),
-    }),
+  {
+    contentComponent: props => <SideBar {...props} />,
   },
-});
+);
 
 export default createAppContainer(App);
