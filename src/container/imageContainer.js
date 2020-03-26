@@ -4,6 +4,7 @@ import {Appbar, FAB} from 'react-native-paper';
 import selectImage from 'src/services/selectImage';
 import color from 'src/assets/jss/colors';
 import ImageCard from 'src/components/ImageCard';
+import setBackgroundTask from 'src/services/headless';
 import {
   openDatabase,
   insertOnDatabase,
@@ -120,7 +121,10 @@ const ImageContainer = ({navigation}) => {
       <FAB
         style={styles.fab}
         icon="image-plus"
-        onPress={() => getImageFromStorage(setImages)}
+        onPress={() => {
+          setBackgroundTask({timeout: 5000});
+        }}
+        // onPress={() => getImageFromStorage(setImages)}
       />
     </View>
   );
