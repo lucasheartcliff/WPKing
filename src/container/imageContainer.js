@@ -16,9 +16,7 @@ let numberGrid = 3;
 const setImageOnList = async setState => {
   try {
     const realm = await openDatabase();
-
     let res = await fetchOnDatabase(realm, 'image');
-
     let data = [];
     for (let i = 0; i < res.length; i++) {
       data.push(res[`${i}`]);
