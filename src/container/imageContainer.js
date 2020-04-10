@@ -24,7 +24,7 @@ const setImageOnList = async setState => {
 
     await setState(data);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -39,7 +39,7 @@ const getImageFromStorage = async setState => {
 
     setImageOnList(setState);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -119,10 +119,7 @@ const ImageContainer = ({navigation}) => {
       <FAB
         style={styles.fab}
         icon="image-plus"
-        onPress={() => {
-          setBackgroundTask({timeout: 5000});
-        }}
-        // onPress={() => getImageFromStorage(setImages)}
+        onPress={() => getImageFromStorage(setImages)}
       />
     </View>
   );

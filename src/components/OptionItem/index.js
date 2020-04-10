@@ -14,7 +14,7 @@ const OptionItem = props => {
     text: {
       color: color[theme].secondary,
       marginTop: 1,
-      fontSize: 16,
+      fontSize: 14,
     },
   });
   return (

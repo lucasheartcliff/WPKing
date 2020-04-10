@@ -13,7 +13,7 @@ const App = createDrawerNavigator(
       navigationOptions: ({navigation}) => ({
         drawerLabel: ({focused}) => (
           <DrawerItem
-            focused={focused}
+            focused={navigation.isFocused()}
             screen="ImageContainer"
             title="Painel"
           />
@@ -25,7 +25,7 @@ const App = createDrawerNavigator(
       navigationOptions: ({navigation}) => ({
         drawerLabel: ({focused}) => (
           <DrawerItem
-            focused={focused}
+            focused={navigation.isFocused()}
             screen="SettingsContainer"
             title="Configurações"
           />

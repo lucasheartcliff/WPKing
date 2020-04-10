@@ -35,12 +35,18 @@ const SideBar = props => {
       <View style={styles.body}>
         <DrawerItem
           title="Painel"
-          focused={navigation.isFocused()}
+          focused={navigation.isFocused('Dashboard')}
           onPress={() => {
-            navigation.navigate();
+            navigation.navigate('Dashboard');
           }}
         />
-        <DrawerItem title="Configurações" focused={navigation.isFocused()} />
+        <DrawerItem
+          title="Configurações"
+          focused={navigation.isFocused('Settings')}
+          onPress={() => {
+            navigation.navigate('Settings');
+          }}
+        />
       </View>
 
       <View style={styles.footer}>

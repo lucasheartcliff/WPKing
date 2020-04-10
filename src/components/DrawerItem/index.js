@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import color from 'src/assets/jss/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -58,17 +59,19 @@ const DrawerItem = props => {
   ];
 
   return (
-    <View style={drawerItem} {...rest}>
-      <View style={{marginRight: 5}}>{renderIcon(title, focused)}</View>
-      <View style={{alignItems: 'center'}}>
-        <Text
-          size={15}
-          bold={focused ? true : false}
-          style={{color: focused ? 'white' : color[theme].secondary}}>
-          {title}
-        </Text>
+    <TouchableOpacity {...rest}>
+      <View style={drawerItem}>
+        <View style={{marginRight: 5}}>{renderIcon(title, focused)}</View>
+        <View style={{alignItems: 'center'}}>
+          <Text
+            size={14}
+            bold={focused ? true : false}
+            style={{color: focused ? 'white' : color[theme].secondary}}>
+            {title}
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
