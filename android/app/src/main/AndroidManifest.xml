@@ -10,7 +10,6 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
-      <service android:name="com.wpking.SetBackgroundTask" android:enabled="true" android:label="ChangeWallpaperService"/> 
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

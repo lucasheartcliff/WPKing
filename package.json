@@ -12,12 +12,14 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/cli": "^4.6.3",
     "appcenter": "2.6.1",
     "appcenter-analytics": "2.6.1",
     "appcenter-crashes": "2.6.1",
+    "doctor": "^0.3.0",
     "galio-framework": "^0.6.3",
-    "react": "16.9.0",
-    "react-native": "0.61.4",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
     "react-native-background-task": "^0.2.1",
     "react-native-countdown-component": "^2.6.0",
     "react-native-gesture-handler": "^1.6.1",
