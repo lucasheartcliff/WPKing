@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, FlatList, Dimensions, StyleSheet} from 'react-native';
 import {Appbar, FAB} from 'react-native-paper';
 import selectImage from 'src/services/selectImage';
@@ -46,8 +46,31 @@ const getImageFromStorage = async setState => {
 const ImageContainer = ({navigation}) => {
   const [images, setImages] = useState([]);
   const [screenWidth, setScreenWidth] = useState();
+  const [selected, setSelected] = useState(new Map());
+  const [editMode, setEditMode] = useState(false);
   const theme = 'light';
 
+  const onSelect = useCallback(
+    id => {
+      const newSelected = new Map(selected);
+      newSelected.set(id, !selected.get(id));
+      setSelected(newSelected);
+      setEditMode(
+        checkEditMode()
+      )
+    },
+    [selected],
+  );
+
+  const checkEditMode = () => {
+    for (const [key, value] of selected) {
+      if (value) {
+        return true
+      }
+    }
+    return false
+  };
+  
   useEffect(() => {
     const onChange = result => {
       let {width, height} = result.screen;
@@ -67,6 +90,7 @@ const ImageContainer = ({navigation}) => {
 
     onChange({screen: Dimensions.get('screen')});
     setImageOnList(setImages);
+    // setBackgroundTask({timeout:3600})
   }, []);
 
   const styles = StyleSheet.create({
@@ -79,7 +103,7 @@ const ImageContainer = ({navigation}) => {
     },
     listImage: {
       flex: 1,
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
     image: {
       width: screenWidth,
@@ -112,8 +136,24 @@ const ImageContainer = ({navigation}) => {
           keyExtractor={item => item.uri}
           numColumns={numberGrid}
           renderItem={({item}) => {
-            return <ImageCard uri={item.uri} style={styles.image} />;
+            return (
+              <ImageCard
+                uri={item.uri}
+                style={styles.image}
+                selected={!!selected.get(item.uri)}
+                onPress={() => {
+                  if (editMode) {
+                    onSelect(item.uri);
+                  }
+                }}
+                onLongPress={() => {
+                  onSelect(item.uri);
+                  setEditMode(true);
+                }}
+              />
+            );
           }}
+          extraData={selected}
         />
       </View>
       <FAB

@@ -1,16 +1,19 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {Surface} from 'react-native-paper';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const ImageCard = props => {
   const {uri, selected, ...rest} = props;
 
   return (
-    <Surface {...rest}>
-      <View style={selected ? styles.selected : null}>
-        <Image style={styles.image} source={{uri: uri}} />
-      </View>
-    </Surface>
+    <TouchableWithoutFeedback {...rest}>
+      <Surface>
+        <View style={selected ? styles.selected : null}>
+          <Image style={styles.image} source={{uri: uri}} />
+        </View>
+      </Surface>
+    </TouchableWithoutFeedback>
   );
 };
 
