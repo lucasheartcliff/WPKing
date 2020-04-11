@@ -13,20 +13,18 @@ const checkStatus = async () => {
 
   if (status.available) {
     // Everything's fine
-    console.info('Granted', 'Your background task is running');
+    console.info('Granted\nYour background task is running');
     return;
   }
 
   const reason = status.unavailableReason;
   if (reason === BackgroundTask.UNAVAILABLE_DENIED) {
     console.warn(
-      'Denied',
-      'Please enable background "Background App Refresh" for this app',
+      'Denied\nPlease enable background "Background App Refresh" for this app',
     );
   } else if (reason === BackgroundTask.UNAVAILABLE_RESTRICTED) {
-    console.warn(
-      'Restricted',
-      'Background tasks are restricted on your device',
+    console.error(
+      'Restricted\nBackground tasks are restricted on your device',
     );
   }
 };
