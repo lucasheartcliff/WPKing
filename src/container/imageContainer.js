@@ -4,7 +4,8 @@ import {Appbar, FAB} from 'react-native-paper';
 import selectImage from 'src/services/selectImage';
 import color from 'src/assets/jss/colors';
 import ImageCard from 'src/components/ImageCard';
-import setBackgroundTask from 'src/services/headless';
+import {connect} from 'react-redux'
+
 import {
   openDatabase,
   insertOnDatabase,
@@ -43,12 +44,11 @@ const getImageFromStorage = async setState => {
   }
 };
 
-const ImageContainer = ({navigation}) => {
+const ImageContainer = (props) => {
   const [images, setImages] = useState([]);
   const [screenWidth, setScreenWidth] = useState();
   const [selected, setSelected] = useState(new Map());
   const [editMode, setEditMode] = useState(false);
-  const theme = 'light';
 
   const onSelect = useCallback(
     id => {
@@ -100,6 +100,7 @@ const ImageContainer = ({navigation}) => {
     },
     header: {
       backgroundColor: color[theme].primary,
+      paddingHorizontal: 5
     },
     listImage: {
       flex: 1,
@@ -165,4 +166,4 @@ const ImageContainer = ({navigation}) => {
   );
 };
 
-export default ImageContainer;
+export default connect(state=>({theme: state.theme, imageList: state.imageList}))(ImageContainer);
