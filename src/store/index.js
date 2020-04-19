@@ -1,8 +1,8 @@
 import { createStore } from 'redux';
 import { fetchOnDatabase } from 'src/services/database';
 
-const getInitialValues = async () => {
-  let state = await {
+const getInitialValues = () => {
+  let state = {
     theme: 'light',
     backgroundService: true,
     timeToChange: 900,
@@ -12,23 +12,18 @@ const getInitialValues = async () => {
   try {
     state = {
       ...state,
-      imageList: await fetchOnDatabase('image'),
+      imageList: fetchOnDatabase('image').then(res => res),
       //...(await fetchOnDatabase('settings')),
     };
 
-    return await state;
+    return state;
   } catch (error) {
     console.error(error);
   }
 };
-
-let initialState = getInitialValues()
+let initialState;
+initialState = initialState || getInitialValues();
 const reducer = (state = initialState, action) => {
-  console.log(initialState);
-  if (!initialState) {
-    getInitialValues();
-    state = initialState;
-  }
   console.log('reducer', state, action);
   switch (action.type) {
     case 'initialState':
