@@ -24,7 +24,7 @@ const getInitialValues = () => {
 let initialState;
 initialState = initialState || getInitialValues();
 const reducer = (state = initialState, action) => {
-  console.log('reducer', state, action);
+  //console.log('reducer', state, action);
   switch (action.type) {
     case 'initialState':
       const { type, ...actionState } = action;
