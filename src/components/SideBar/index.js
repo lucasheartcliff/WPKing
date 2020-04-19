@@ -1,13 +1,17 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 import DrawerItem from 'src/components/DrawerItem';
+import color from 'src/assets/jss/colors';
 
-const SideBar = props => {
-  const {navigation} = props;
+const SideBar = ({ navigation }) => {
+  const theme = useSelector(state => state.theme);
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: 'column',
+      backgroundColor: color[theme].primary,
     },
     header: {
       alignItems: 'center',
@@ -21,11 +25,12 @@ const SideBar = props => {
     },
     footer: {
       width: '100%',
-      height: '30%',
+      height: '20%',
       alignItems: 'center',
       justifyContent: 'flex-start',
     },
   });
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

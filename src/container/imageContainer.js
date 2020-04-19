@@ -1,51 +1,46 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {View, FlatList, Dimensions, StyleSheet} from 'react-native';
-import {Appbar, FAB} from 'react-native-paper';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, FlatList, Dimensions, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { Appbar, FAB } from 'react-native-paper';
 import selectImage from 'src/services/selectImage';
 import color from 'src/assets/jss/colors';
 import ImageCard from 'src/components/ImageCard';
-import {connect} from 'react-redux'
 
-import {
-  openDatabase,
-  insertOnDatabase,
-  fetchOnDatabase,
-} from 'src/services/database';
+import { insertOnDatabase, fetchOnDatabase } from 'src/services/database';
 
 let numberGrid = 3;
 
-const setImageOnList = async setState => {
-  try {
-    const realm = await openDatabase();
-    let res = await fetchOnDatabase(realm, 'image');
-    let data = [];
-    for (let i = 0; i < res.length; i++) {
-      data.push(res[`${i}`]);
-    }
-
-    await setState(data);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getImageFromStorage = async setState => {
+const setImageOnList = async imagesMap => {
+  const id = Object.keys(imagesMap).length || 0;
+  console.log('id', id);
   try {
     const imagesArray = await selectImage();
-    const realm = await openDatabase();
 
     await imagesArray.map(image => {
-      insertOnDatabase(realm, 'image', {uri: image.path});
+      insertOnDatabase('image', { id: id, uri: image.path });
     });
-
-    setImageOnList(setState);
   } catch (error) {
     console.error(error);
   }
 };
 
-const ImageContainer = (props) => {
-  const [images, setImages] = useState([]);
+const checkEditMode = selected => {
+  for (const [key, value] of selected) {
+    if (value) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const ImageContainer = ({ navigation }) => {
+  useSelector(state => {
+    console.log('state in component', state);
+  });
+  const theme = useSelector(state => state.theme);
+  const images = useSelector(state => state.imageList);
+  const dispatch = useDispatch();
+
   const [screenWidth, setScreenWidth] = useState();
   const [selected, setSelected] = useState(new Map());
   const [editMode, setEditMode] = useState(false);
@@ -55,25 +50,14 @@ const ImageContainer = (props) => {
       const newSelected = new Map(selected);
       newSelected.set(id, !selected.get(id));
       setSelected(newSelected);
-      setEditMode(
-        checkEditMode()
-      )
+      setEditMode(checkEditMode(selected));
     },
     [selected],
   );
 
-  const checkEditMode = () => {
-    for (const [key, value] of selected) {
-      if (value) {
-        return true
-      }
-    }
-    return false
-  };
-  
   useEffect(() => {
     const onChange = result => {
-      let {width, height} = result.screen;
+      let { width, height } = result.screen;
 
       if (width > height) {
         width = width * 0.88;
@@ -88,10 +72,8 @@ const ImageContainer = (props) => {
 
     Dimensions.addEventListener('change', onChange);
 
-    onChange({screen: Dimensions.get('screen')});
-    setImageOnList(setImages);
-    // setBackgroundTask({timeout:3600})
-  }, []);
+    onChange({ screen: Dimensions.get('screen') });
+  }, [dispatch]);
 
   const styles = StyleSheet.create({
     container: {
@@ -100,7 +82,7 @@ const ImageContainer = (props) => {
     },
     header: {
       backgroundColor: color[theme].primary,
-      paddingHorizontal: 5
+      paddingHorizontal: 5,
     },
     listImage: {
       flex: 1,
@@ -133,10 +115,10 @@ const ImageContainer = (props) => {
       </Appbar.Header>
       <View style={styles.listImage}>
         <FlatList
-          data={images}
-          keyExtractor={item => item.uri}
+          data={Object.values(images)}
+          keyExtractor={item => item.id}
           numColumns={numberGrid}
-          renderItem={({item}) => {
+          renderItem={({ item }) => {
             return (
               <ImageCard
                 uri={item.uri}
@@ -160,10 +142,14 @@ const ImageContainer = (props) => {
       <FAB
         style={styles.fab}
         icon="image-plus"
-        onPress={() => getImageFromStorage(setImages)}
+        onPress={async () => {
+          await setImageOnList(images);
+          const data = await fetchOnDatabase('image');
+          dispatch({ type: 'updateList', imageList: data });
+        }}
       />
     </View>
   );
 };
 
-export default connect(state=>({theme: state.theme, imageList: state.imageList}))(ImageContainer);
+export default ImageContainer;

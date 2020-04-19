@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Switch, Text} from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Switch, Text } from 'react-native-paper';
 import color from 'src/assets/jss/colors';
 
 const OptionItem = props => {
-  const {theme, value, text, onValueChange} = props;
+  const { theme, value, text, onValueChange } = props;
 
   const styles = StyleSheet.create({
     optionItem: {
@@ -23,7 +23,7 @@ const OptionItem = props => {
       <Switch
         value={value}
         color={color.primary}
-        trackColor={{false: '#ddd', true: color.secondary}}
+        trackColor={{ false: '#ddd', true: color.secondary }}
         onValueChange={() => {
           onValueChange(value);
         }}

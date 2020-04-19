@@ -1,16 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Surface, Appbar, Divider} from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Surface, Appbar, Divider } from 'react-native-paper';
 import color from 'src/assets/jss/colors';
 import OptionItem from 'src/components/OptionItem';
 
-const SettingsContainer = ({navigation}) => {
+import { useSelector, useDispatch } from 'react-redux';
+
+const SettingsContainer = ({ navigation }) => {
   const [active, setActive] = useState();
   //const [timeToChange, setTimeToChange] = useState();
-  const [darkMode, setDarkMode] = useState();
 
-  let theme = 'light';
-
+  const theme = useSelector(state => state.theme);
+  const dispatch = useDispatch();
   useEffect(() => {});
 
   const styles = StyleSheet.create({
@@ -63,10 +64,12 @@ const SettingsContainer = ({navigation}) => {
           <OptionItem
             text={'Dark Mode: '}
             theme={theme}
-            value={darkMode}
+            value={theme === 'dark'}
             onValueChange={() => {
-              //navigation.setParams({theme: darkMode ? 'light' : 'dark'});
-              setDarkMode(!darkMode);
+              dispatch({
+                type: 'switchTheme',
+                theme: theme === 'light' ? 'dark' : 'light',
+              });
             }}
           />
         </Surface>

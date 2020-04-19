@@ -1,6 +1,6 @@
 import React from 'react';
-import {createAppContainer} from 'react-navigation';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import ImageContainer from 'src/container/imageContainer';
 import SettingsContainer from 'src/container/settingsContainer';
 import SideBar from 'src/components/SideBar';
@@ -10,8 +10,8 @@ const MainNavigator = createDrawerNavigator(
   {
     Dashboard: {
       screen: ImageContainer,
-      navigationOptions: ({navigation}) => ({
-        drawerLabel: ({focused}) => (
+      navigationOptions: ({ navigation }) => ({
+        drawerLabel: ({ focused }) => (
           <DrawerItem
             focused={navigation.isFocused()}
             screen="ImageContainer"
@@ -22,8 +22,8 @@ const MainNavigator = createDrawerNavigator(
     },
     Settings: {
       screen: SettingsContainer,
-      navigationOptions: ({navigation}) => ({
-        drawerLabel: ({focused}) => (
+      navigationOptions: ({ navigation }) => ({
+        drawerLabel: ({ focused }) => (
           <DrawerItem
             focused={navigation.isFocused()}
             screen="SettingsContainer"

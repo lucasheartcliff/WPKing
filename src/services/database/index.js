@@ -1,56 +1,53 @@
 const Realm = require('realm');
+import { image, settings } from './schema';
 
-const imageSchema = {
-  name: 'image',
-  properties: {
-    uri: 'string',
-  },
-};
-
-const settingsSchema = {
-  name: 'settings',
-  properties: {
-    flux: 'string',
-    timeToChange: 'int', //Time in 'ms'
-  },
-};
-
-const openDatabase = () => {
-  return Realm.open({
-    path: 'database',
-    schema: [imageSchema, settingsSchema],
+const openDatabase = () =>
+  Realm.open({
+    path: 'wpkconfig',
+    schema: [image, settings],
   }).then(realm => realm);
-};
 
-const insertOnDatabase = (realm, branchName, dataObject) => {
-  //let schema = branchName === 'image' ? imageSchema : settingsSchema;
-  return realm.write(() => {
+const insertOnDatabase = async (branchName, dataObject) => {
+  const realm = await openDatabase();
+  return await realm.write(() => {
     realm.create(branchName, dataObject);
   });
 };
 
-const deleteOnDatabase = (realm, branchName, dataObject) => {
-  return realm.write(() => {
+const updateOnDatabase = async (branchName, node, newValue) => {
+  const realm = await openDatabase();
+  return await realm.write(() => {
+    //realm.create(branchName,newValue,'modified')
+    let data = realm.objects(branchName);
+    data[node] = newValue;
+  });
+};
+
+const deleteOnDatabase = async (branchName, dataObject) => {
+  const realm = await openDatabase();
+  return await realm.write(() => {
     const data = realm.create(branchName, dataObject);
     realm.delete(data);
   });
 };
 
-const deleteAllOnDatabase = (realm, branchName) => {
-  return realm.write(() => {
+const deleteAllOnDatabase = async branchName => {
+  const realm = await openDatabase();
+  return await realm.write(() => {
     const data = realm.objects(branchName);
     realm.delete(data);
   });
 };
 
-const fetchOnDatabase = (realm, branchName) => {
-  const result = realm.objects(branchName);
-  return result;
+const fetchOnDatabase = async branchName => {
+  const realm = await openDatabase();
+  const result = await realm.objects(branchName);
+  return await result;
 };
 
 export {
-  openDatabase,
   insertOnDatabase,
+  updateOnDatabase,
   fetchOnDatabase,
   deleteOnDatabase,
   deleteAllOnDatabase,

@@ -1,8 +1,11 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { StyleSheet, View, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import color from 'src/assets/jss/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import { useSelector } from 'react-redux';
 
 const renderIcon = (title, focused) => {
   switch (title) {
@@ -27,9 +30,8 @@ const renderIcon = (title, focused) => {
   }
 };
 
-const DrawerItem = props => {
-  const {title, focused, ...rest} = props;
-  const theme = 'light';
+const DrawerItem = ({ title, focused, ...rest }) => {
+  const theme = useSelector(state => state.theme);
 
   const styles = StyleSheet.create({
     defaultStyle: {
@@ -61,12 +63,12 @@ const DrawerItem = props => {
   return (
     <TouchableOpacity {...rest}>
       <View style={drawerItem}>
-        <View style={{marginRight: 5}}>{renderIcon(title, focused)}</View>
-        <View style={{alignItems: 'center'}}>
+        <View style={{ marginRight: 5 }}>{renderIcon(title, focused)}</View>
+        <View style={{ alignItems: 'center' }}>
           <Text
-            size={14}
+            size={12}
             bold={focused ? true : false}
-            style={{color: focused ? 'white' : color[theme].secondary}}>
+            style={{ color: focused ? 'white' : color[theme].secondary }}>
             {title}
           </Text>
         </View>
