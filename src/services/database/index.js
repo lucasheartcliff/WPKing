@@ -3,7 +3,7 @@ import { image, settings } from './schema';
 
 const openDatabase = () =>
   Realm.open({
-    path: 'wpkconfig.v4',
+    path: 'wpkconfig.v5',
     schema: [image, settings],
   }).then(realm => realm);
 
@@ -19,7 +19,6 @@ const updateOnDatabase = async (branchName, node, newValue) => {
   return await realm.write(() => {
     realm.create(branchName, { node: { ...newValue } }, 'modified');
     let data = realm.objects(branchName);
-    console.log('On Update',data);
   });
 };
 
@@ -41,7 +40,8 @@ const deleteAllOnDatabase = async branchName => {
 
 const fetchOnDatabase = async branchName => {
   const realm = await openDatabase();
-  return await realm.objects(branchName);
+  const result = await realm.objects(branchName);
+  return result;
 };
 
 export {

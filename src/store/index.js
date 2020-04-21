@@ -20,7 +20,7 @@ const getInitialValues = () => {
 
   fetchOnDatabase('settings')
     .then(settings => {
-      if (settings) {
+      if (settings !== undefined && settings[0]) {
         const {
           theme,
           backgroundService,
@@ -48,19 +48,20 @@ const getInitialValues = () => {
 let initialState;
 initialState = initialState ? initialState : getInitialValues();
 const reducer = (state = initialState, action) => {
-  let newState = state;
+  console.log('state ', state);
   switch (action.type) {
     case 'updateList':
-      newState = { ...state, imageList: action.imageList };
+      return { ...state, imageList: action.imageList };
     case 'switchTheme':
-      newState = { ...state, theme: action.theme };
+      return { ...state, theme: action.theme };
     case 'updateTime':
-      newState = { ...state, timeToChange: action.timeToChange };
+      return { ...state, timeToChange: action.timeToChange };
 
     case 'toggleService':
-      newState = { ...state, backgroundService: action.backgroundService };
+      return { ...state, backgroundService: action.backgroundService };
+    default:
+      return state;
   }
-  return newState;
 };
 
 const store = createStore(reducer);

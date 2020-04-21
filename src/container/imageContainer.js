@@ -11,11 +11,13 @@ import { insertOnDatabase, fetchOnDatabase } from 'src/services/database';
 let numberGrid = 3;
 
 const setImageOnList = async imagesMap => {
-  const id = Math.max.apply(Object.keys(imagesMap)) + 1 || 0;
+  const keys = Object.keys(imagesMap);
+  const id = keys.length === 0 ? 0 : Math.max(...keys) + 1;
+
   try {
     const imagesArray = await selectImage();
 
-    await imagesArray.map(image => {
+    await imagesArray.forEach(image => {
       insertOnDatabase('image', { id: id, uri: image.path });
     });
   } catch (error) {
@@ -40,7 +42,7 @@ const ImageContainer = ({ navigation }) => {
   const [screenWidth, setScreenWidth] = useState();
   const [selected, setSelected] = useState(new Map());
   const [editMode, setEditMode] = useState(false);
-  console.log(images);
+
   const onSelect = useCallback(
     id => {
       const newSelected = new Map(selected);

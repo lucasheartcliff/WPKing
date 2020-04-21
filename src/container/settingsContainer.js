@@ -12,11 +12,10 @@ const setSettingsOnDatabase = settingsState => {
   settingsState.backgroundService = JSON.stringify(
     settingsState.backgroundService,
   );
-  console.log('On Set', settingsState);
   deleteAllOnDatabase(branchName);
-  insertOnDatabase(branchName,settingsState).catch(error =>
-    console.error(error),
-  );
+  insertOnDatabase(branchName, settingsState)
+    .then(() => console.info('Settings has been updated'))
+    .catch(error => console.error(error));
 };
 
 const SettingsContainer = ({ navigation }) => {
@@ -36,7 +35,7 @@ const SettingsContainer = ({ navigation }) => {
     },
     divider: {
       backgroundColor: color[state.theme].background,
-      height: 1,
+      height: 0.5,
     },
     listOption: {
       width: '95%',
@@ -50,7 +49,7 @@ const SettingsContainer = ({ navigation }) => {
       elevation: 12,
     },
   });
-  console.log('state ',state);
+
   return (
     <View style={styles.container}>
       <Appbar.Header style={styles.header}>
@@ -80,9 +79,9 @@ const SettingsContainer = ({ navigation }) => {
             text={'Dark Mode: '}
             theme={state.theme}
             value={state.theme === 'dark'}
-            onValueChange={() => {
+            onValueChange={async() => {
               const newValue = state.theme === 'light' ? 'dark' : 'light';
-              setSettingsOnDatabase({ ...state, theme: newValue });
+              await setSettingsOnDatabase({ ...state, theme: newValue });
               dispatch({
                 type: 'switchTheme',
                 theme: newValue,
