@@ -3,6 +3,7 @@ import { fetchOnDatabase } from 'src/services/database';
 
 const getInitialValues = () => {
   let state = {
+    loading: true,
     theme: 'light',
     order: [],
     language: 'english',
@@ -42,6 +43,7 @@ const getInitialValues = () => {
     .catch(error => {
       console.error('Get Settings Error: ', error);
     });
+  state.loading = false;
   return state;
 };
 
@@ -56,7 +58,6 @@ const reducer = (state = initialState, action) => {
       return { ...state, theme: action.theme };
     case 'updateTime':
       return { ...state, timeToChange: action.timeToChange };
-
     case 'toggleService':
       return { ...state, backgroundService: action.backgroundService };
     default:
