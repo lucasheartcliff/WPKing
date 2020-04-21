@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "doctor":"npx @react-native-community/cli doctor",
+    "doctor": "npx @react-native-community/cli doctor",
     "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "clean": "cd android && gradlew clean && cd ..",
     "test": "jest",

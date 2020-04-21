@@ -1,52 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { Surface, Appbar, Divider } from 'react-native-paper';
 import color from 'src/assets/jss/colors';
 import OptionItem from 'src/components/OptionItem';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { insertOnDatabase, deleteAllOnDatabase } from 'src/services/database';
+
+const setSettingsOnDatabase = settingsState => {
+  const branchName = 'settings';
+  settingsState.backgroundService = JSON.stringify(
+    settingsState.backgroundService,
+  );
+  console.log('On Set', settingsState);
+  deleteAllOnDatabase(branchName);
+  insertOnDatabase(branchName,settingsState).catch(error =>
+    console.error(error),
+  );
+};
 
 const SettingsContainer = ({ navigation }) => {
-  const [active, setActive] = useState();
-  //const [timeToChange, setTimeToChange] = useState();
-
-  const theme = useSelector(state => state.theme);
+  const state = useSelector(({ imageList, ...settingsState }) => settingsState);
   const dispatch = useDispatch();
-  useEffect(() => {});
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: color[theme].background,
+      backgroundColor: color[state.theme].background,
     },
     optionContainer: {
       alignItems: 'center',
     },
     header: {
-      backgroundColor: color[theme].primary,
+      backgroundColor: color[state.theme].primary,
     },
     divider: {
-      backgroundColor: color[theme].background,
+      backgroundColor: color[state.theme].background,
       height: 1,
     },
     listOption: {
       width: '95%',
       flexDirection: 'column',
       justifyContent: 'center',
-      borderRadius: 5,
+      borderRadius: 3,
       height: 'auto',
       padding: 25,
-      margin: 5,
-      backgroundColor: color[theme].primary,
+      margin: 3,
+      backgroundColor: color[state.theme].primary,
       elevation: 12,
     },
   });
+  console.log('state ',state);
   return (
     <View style={styles.container}>
       <Appbar.Header style={styles.header}>
         <Appbar.Action
           icon={'menu'}
-          color={color[theme].secondary}
+          color={color[state.theme].secondary}
           onPress={() => navigation.toggleDrawer()}
         />
       </Appbar.Header>
@@ -54,21 +64,28 @@ const SettingsContainer = ({ navigation }) => {
         <Surface style={styles.listOption}>
           <OptionItem
             text={'Active: '}
-            theme={theme}
-            value={active}
+            theme={state.theme}
+            value={state.backgroundService}
             onValueChange={() => {
-              setActive(!active);
+              const newValue = !state.backgroundService;
+              setSettingsOnDatabase({ ...state, backgroundService: newValue });
+              dispatch({
+                type: 'toggleService',
+                backgroundService: newValue,
+              });
             }}
           />
           <Divider style={styles.divider} />
           <OptionItem
             text={'Dark Mode: '}
-            theme={theme}
-            value={theme === 'dark'}
+            theme={state.theme}
+            value={state.theme === 'dark'}
             onValueChange={() => {
+              const newValue = state.theme === 'light' ? 'dark' : 'light';
+              setSettingsOnDatabase({ ...state, theme: newValue });
               dispatch({
                 type: 'switchTheme',
-                theme: theme === 'light' ? 'dark' : 'light',
+                theme: newValue,
               });
             }}
           />

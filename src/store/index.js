@@ -4,43 +4,63 @@ import { fetchOnDatabase } from 'src/services/database';
 const getInitialValues = () => {
   let state = {
     theme: 'light',
+    order: [],
+    language: 'english',
     backgroundService: true,
     timeToChange: 900,
     imageList: {},
   };
+  fetchOnDatabase('image')
+    .then(imageList => {
+      state.imageList = imageList || {};
+    })
+    .catch(error => {
+      console.error('Get Images Error: ', error);
+    });
 
-  try {
-    state = {
-      ...state,
-      imageList: fetchOnDatabase('image').then(res => res),
-      //...(await fetchOnDatabase('settings')),
-    };
+  fetchOnDatabase('settings')
+    .then(settings => {
+      if (settings) {
+        const {
+          theme,
+          backgroundService,
+          timeToChange,
+          language,
+          order,
+        } = settings[0];
 
-    return state;
-  } catch (error) {
-    console.error(error);
-  }
+        state.theme = theme || state.theme;
+        state.backgroundService =
+          backgroundService === undefined
+            ? state.backgroundService
+            : JSON.parse(backgroundService);
+        state.timeToChange = timeToChange || state.timeToChange;
+        state.language = language || state.language;
+        state.order = order || state.order;
+      }
+    })
+    .catch(error => {
+      console.error('Get Settings Error: ', error);
+    });
+  return state;
 };
+
 let initialState;
-initialState = initialState || getInitialValues();
+initialState = initialState ? initialState : getInitialValues();
 const reducer = (state = initialState, action) => {
-  //console.log('reducer', state, action);
+  let newState = state;
   switch (action.type) {
-    case 'initialState':
-      const { type, ...actionState } = action;
-      return { ...state, ...actionState };
-    case 'switchTheme':
-      return { ...state, theme: action.theme };
     case 'updateList':
-      console.log('updatingList...');
-      return { ...state, imageList: action.imageList };
+      newState = { ...state, imageList: action.imageList };
+    case 'switchTheme':
+      newState = { ...state, theme: action.theme };
     case 'updateTime':
-      return { ...state, timeToChange: action.timeToChange };
+      newState = { ...state, timeToChange: action.timeToChange };
+
     case 'toggleService':
-      return { ...state, backgroundService: action.backgroundService };
-    default:
-      return state;
+      newState = { ...state, backgroundService: action.backgroundService };
   }
+  return newState;
 };
 
 const store = createStore(reducer);

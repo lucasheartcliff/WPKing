@@ -11,8 +11,7 @@ import { insertOnDatabase, fetchOnDatabase } from 'src/services/database';
 let numberGrid = 3;
 
 const setImageOnList = async imagesMap => {
-  const id = Object.keys(imagesMap).length || 0;
-  console.log('id', id);
+  const id = Math.max.apply(Object.keys(imagesMap)) + 1 || 0;
   try {
     const imagesArray = await selectImage();
 
@@ -34,17 +33,14 @@ const checkEditMode = selected => {
 };
 
 const ImageContainer = ({ navigation }) => {
-  useSelector(state => {
-    console.log('state in component', state);
-  });
   const theme = useSelector(state => state.theme);
-  const images = useSelector(state => state.imageList);
+  const images = useSelector(({ imageList }) => imageList);
   const dispatch = useDispatch();
 
   const [screenWidth, setScreenWidth] = useState();
   const [selected, setSelected] = useState(new Map());
   const [editMode, setEditMode] = useState(false);
-
+  console.log(images);
   const onSelect = useCallback(
     id => {
       const newSelected = new Map(selected);
@@ -115,27 +111,25 @@ const ImageContainer = ({ navigation }) => {
       </Appbar.Header>
       <View style={styles.listImage}>
         <FlatList
-          data={Object.values(images)}
+          data={Array.from(images)}
           keyExtractor={item => item.id}
           numColumns={numberGrid}
-          renderItem={({ item }) => {
-            return (
-              <ImageCard
-                uri={item.uri}
-                style={styles.image}
-                selected={!!selected.get(item.uri)}
-                onPress={() => {
-                  if (editMode) {
-                    onSelect(item.uri);
-                  }
-                }}
-                onLongPress={() => {
+          renderItem={({ item }) => (
+            <ImageCard
+              uri={item.uri}
+              style={styles.image}
+              selected={!!selected.get(item.uri)}
+              onPress={() => {
+                if (editMode) {
                   onSelect(item.uri);
-                  setEditMode(true);
-                }}
-              />
-            );
-          }}
+                }
+              }}
+              onLongPress={() => {
+                onSelect(item.uri);
+                setEditMode(true);
+              }}
+            />
+          )}
           extraData={selected}
         />
       </View>

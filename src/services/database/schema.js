@@ -2,7 +2,7 @@ const image = {
   name: 'image',
   primaryKey: 'id',
   properties: {
-    id: 'int',
+    id: {type:'int', indexed: true},
     uri: 'string',
   },
 };
@@ -12,7 +12,7 @@ const settings = {
   properties: {
     language: 'string',
     order: 'int[]',
-    backgroundService: 'bool',
+    backgroundService: 'string',
     theme: 'string',
     timeToChange: 'int', //Time in 'ms'
   },
