@@ -39,14 +39,14 @@ const SideBar = ({ navigation }) => {
 
       <View style={styles.body}>
         <DrawerItem
-          title="Painel"
+          title="Dashboard"
           focused={navigation.isFocused('Dashboard')}
           onPress={() => {
             navigation.navigate('Dashboard');
           }}
         />
         <DrawerItem
-          title="Configurações"
+          title="Settings"
           focused={navigation.isFocused('Settings')}
           onPress={() => {
             navigation.navigate('Settings');

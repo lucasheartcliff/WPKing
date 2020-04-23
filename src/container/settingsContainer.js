@@ -60,7 +60,7 @@ const SettingsContainer = ({ navigation }) => {
         />
         <Appbar.Content
           color={color[state.theme].secondary}
-          title="Configurações"
+          title="Settings"
         />
       </Appbar.Header>
       <View style={styles.optionContainer}>
@@ -91,6 +91,15 @@ const SettingsContainer = ({ navigation }) => {
                 theme: newValue,
               });
             }}
+          />
+
+          <Divider style={styles.divider} />
+          <OptionItem
+            text={'Shuffle: '}
+            theme={state.theme}
+            disabled={true}
+            value={true}
+            //onValueChange={}
           />
         </Surface>
       </View>

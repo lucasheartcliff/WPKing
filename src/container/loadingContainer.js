@@ -20,7 +20,7 @@ const LoadingContainer = ({ navigation }) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: color[theme].background,
+      backgroundColor: color[theme].primary,
     },
 
     logo: {},

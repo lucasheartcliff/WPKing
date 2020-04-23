@@ -11,6 +11,7 @@ const color = {
   },
   primary: '#5E72E4',
   secondary: '#3065ba',
+  white: '#fff',
   black: '#000000',
 };
 

@@ -130,34 +130,23 @@ const ImageContainer = ({ navigation }) => {
           color={color[theme].secondary}
           onPress={() => navigation.toggleDrawer()}
         />
-        <Appbar.Content color={color[theme].secondary} title="Painel" />
-        {editMode
-          ? ((
-              <Appbar.Action
-                icon={'format-list-checks'}
-                color={color[theme].secondary}
-                onPress={() => {
-                  console.log('select all click');
-                }}
-              />
-            ),
-            (
-              <Appbar.Action
-                icon={'delete'}
-                color={color[theme].secondary}
-                onPress={async () => {
-                  await deleteSelectedImages(selected);
-                  setEditMode(false);
-                  setSelected(new Map());
-                  const data = await fetchOnDatabase('image');
-                  dispatch({
-                    type: 'updateList',
-                    imageList: await setImageMap(data),
-                  });
-                }}
-              />
-            ))
-          : null}
+        <Appbar.Content color={color[theme].secondary} title="Dashboard" />
+        {editMode ? (
+          <Appbar.Action
+            icon={'delete'}
+            color={color[theme].secondary}
+            onPress={async () => {
+              await deleteSelectedImages(selected);
+              setEditMode(false);
+              setSelected(new Map());
+              const data = await fetchOnDatabase('image');
+              dispatch({
+                type: 'updateList',
+                imageList: await setImageMap(data),
+              });
+            }}
+          />
+        ) : null}
       </Appbar.Header>
       <View style={styles.listImage}>
         <FlatList
