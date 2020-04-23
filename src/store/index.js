@@ -1,5 +1,6 @@
 import { createStore } from 'redux';
 import { fetchOnDatabase } from 'src/services/database';
+import { setImageMap } from 'src/util';
 
 const getInitialValues = () => {
   let state = {
@@ -13,7 +14,9 @@ const getInitialValues = () => {
   };
   fetchOnDatabase('image')
     .then(imageList => {
-      state.imageList = imageList || {};
+      if (imageList !== undefined) {
+        state.imageList = setImageMap(imageList);
+      }
     })
     .catch(error => {
       console.error('Get Images Error: ', error);
@@ -53,7 +56,7 @@ const reducer = (state = initialState, action) => {
   console.log('state ', state);
   switch (action.type) {
     case 'updateList':
-      return { ...state, imageList: action.imageList };
+      return { ...state, imageList: action.imageList || {} };
     case 'switchTheme':
       return { ...state, theme: action.theme };
     case 'updateTime':

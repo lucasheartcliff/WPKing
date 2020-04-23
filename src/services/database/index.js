@@ -18,14 +18,14 @@ const updateOnDatabase = async (branchName, node, newValue) => {
   const realm = await openDatabase();
   return await realm.write(() => {
     realm.create(branchName, { node: { ...newValue } }, 'modified');
-    let data = realm.objects(branchName);
+    realm.objects(branchName);
   });
 };
 
-const deleteOnDatabase = async (branchName, dataObject) => {
+const deleteOnDatabase = async (branchName, key) => {
   const realm = await openDatabase();
   return await realm.write(() => {
-    const data = realm.create(branchName, dataObject);
+    const data = realm.objects(branchName).filtered(`id == ${key}`);
     realm.delete(data);
   });
 };
@@ -34,6 +34,7 @@ const deleteAllOnDatabase = async branchName => {
   const realm = await openDatabase();
   return await realm.write(() => {
     const data = realm.objects(branchName);
+    console.log(data);
     realm.delete(data);
   });
 };

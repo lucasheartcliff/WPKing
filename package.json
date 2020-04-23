@@ -13,16 +13,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/cli": "^4.6.3",
     "appcenter": "2.6.1",
     "appcenter-analytics": "2.6.1",
     "appcenter-crashes": "2.6.1",
-    "doctor": "^0.3.0",
-    "galio-framework": "^0.6.3",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-background-task": "^0.2.1",
-    "react-native-countdown-component": "^2.6.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-image-crop-picker": "^0.26.1",
     "react-native-paper": "^3.3.0",
@@ -38,6 +34,8 @@
     "rnwallpaper": "^1.2.1"
   },
   "devDependencies": {
+    "@react-native-community/cli": "^4.6.3",
+    "doctor": "^0.3.0",
     "@babel/core": "^7.7.2",
     "@babel/runtime": "^7.7.2",
     "@react-native-community/eslint-config": "^0.0.5",

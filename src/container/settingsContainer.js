@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Surface, Appbar, Divider } from 'react-native-paper';
 import color from 'src/assets/jss/colors';
@@ -51,12 +51,16 @@ const SettingsContainer = ({ navigation }) => {
   });
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Appbar.Header style={styles.header}>
         <Appbar.Action
           icon={'menu'}
           color={color[state.theme].secondary}
           onPress={() => navigation.toggleDrawer()}
+        />
+        <Appbar.Content
+          color={color[state.theme].secondary}
+          title="Configurações"
         />
       </Appbar.Header>
       <View style={styles.optionContainer}>
@@ -79,7 +83,7 @@ const SettingsContainer = ({ navigation }) => {
             text={'Dark Mode: '}
             theme={state.theme}
             value={state.theme === 'dark'}
-            onValueChange={async() => {
+            onValueChange={async () => {
               const newValue = state.theme === 'light' ? 'dark' : 'light';
               await setSettingsOnDatabase({ ...state, theme: newValue });
               dispatch({
@@ -90,7 +94,7 @@ const SettingsContainer = ({ navigation }) => {
           />
         </Surface>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

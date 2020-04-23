@@ -16,7 +16,7 @@ const LoadingContainer = ({ navigation }) => {
       }, 3000);
     }
   }, []);
-  console.log('Loading...');
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -26,8 +26,6 @@ const LoadingContainer = ({ navigation }) => {
     logo: {},
     blankArea: {
       height: '30%',
-      alignItems: 'center',
-      justifyContent: 'center',
     },
     logoArea: {
       height: '40%',
