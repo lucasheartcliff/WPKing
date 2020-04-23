@@ -67,7 +67,6 @@ const ImageContainer = ({ navigation }) => {
 
   const onSelect = useCallback(
     id => {
-      console.log(selected);
       const newSelected = new Map(selected);
       newSelected.set(id, !selected.get(id));
       setSelected(newSelected);

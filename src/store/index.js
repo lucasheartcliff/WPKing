@@ -53,7 +53,6 @@ const getInitialValues = () => {
 let initialState;
 initialState = initialState ? initialState : getInitialValues();
 const reducer = (state = initialState, action) => {
-  console.log('state ', state);
   switch (action.type) {
     case 'updateList':
       return { ...state, imageList: action.imageList || {} };

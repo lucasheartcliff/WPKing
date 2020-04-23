@@ -34,7 +34,6 @@ const deleteAllOnDatabase = async branchName => {
   const realm = await openDatabase();
   return await realm.write(() => {
     const data = realm.objects(branchName);
-    console.log(data);
     realm.delete(data);
   });
 };
