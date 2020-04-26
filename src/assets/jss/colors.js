@@ -10,7 +10,7 @@ const color = {
     background: '#333',
   },
   primary: '#5E72E4',
-  secondary: '#3065ba',
+  secondary: '#38469c',
   white: '#fff',
   black: '#000000',
 };

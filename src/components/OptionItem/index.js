@@ -4,7 +4,7 @@ import { Switch, Text } from 'react-native-paper';
 import color from 'src/assets/jss/colors';
 
 const OptionItem = props => {
-  const { theme, value, text, onValueChange } = props;
+  const { theme, value, text, onValueChange, disabled } = props;
 
   const styles = StyleSheet.create({
     optionItem: {
@@ -23,10 +23,11 @@ const OptionItem = props => {
       <Switch
         value={value}
         color={color.primary}
-        trackColor={{ false: '#ddd', true: color.secondary }}
+        trackColor={{ false: '#ddd', true: !disabled ? color.secondary: '#ddd' }}
         onValueChange={() => {
           onValueChange(value);
         }}
+        disabled={disabled}
       />
     </View>
   );

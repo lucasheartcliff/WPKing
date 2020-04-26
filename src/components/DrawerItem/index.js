@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 const renderIcon = (title, focused) => {
   switch (title) {
-    case 'Painel':
+    case 'Dashboard':
       return (
         <Icon
           name="view-grid"
@@ -17,7 +17,7 @@ const renderIcon = (title, focused) => {
           color={focused ? 'white' : color.primary}
         />
       );
-    case 'Configurações':
+    case 'Settings':
       return (
         <Icon
           name="settings"
@@ -66,7 +66,7 @@ const DrawerItem = ({ title, focused, ...rest }) => {
         <View style={{ marginRight: 5 }}>{renderIcon(title, focused)}</View>
         <View style={{ alignItems: 'center' }}>
           <Text
-            size={12}
+            size={14}
             bold={focused ? true : false}
             style={{ color: focused ? 'white' : color[theme].secondary }}>
             {title}
